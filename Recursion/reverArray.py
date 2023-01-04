@@ -88,3 +88,15 @@ def getAllkeyboardCombination(s):
             new.append(i+j)
     return new
 print(getAllkeyboardCombination("673"))
+
+
+
+def fact(n):
+    if(n==0):
+        return 1
+
+    value= n*fact(n-1)
+    print(value)
+    return value
+
+fact(5)

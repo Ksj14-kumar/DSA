@@ -60,6 +60,7 @@ def maximum(n1,n2):
 class BinaryTree:
     def __init__(self) -> None:
         self.stack=[]
+        self.pre_start=0
 
     def createTree(self,array):
         root_node= Node(array[0])
@@ -387,6 +388,7 @@ class BinaryTree:
             return dfs(root,x,y)
         return False
     def binaryTreeToFlatten(self,root):
+        "Binary tree into flatten tree in any order"
         if(root is None):
             return root
         curr= root
@@ -401,6 +403,20 @@ class BinaryTree:
                 curr.left=None
             curr= curr.right
         return root
+    def BinaryTreeIntoSortedFlatten(self,root):
+        dummy= Node(-1)
+        pre= dummy
+        def inorderTraversal(root):
+            if(root is None):
+                return
+            inorderTraversal(root.left)
+            self.pre.left= None
+            self.pre.right= root
+            self.pre= root
+            inorderTraversal(root.right)
+        inorderTraversal(root)
+        return self.dummy.right
+            
 
         
     def leftView(self,root):
@@ -506,6 +522,56 @@ class BinaryTree:
         root1.left= left
         root1.right= right
         return root1
+    def printAllSingleChild(self,root):
+        if(root is None):
+            return
+        
+        if(root.left is None or root.right is None):
+            if(root.left is None):
+                print(root.left)
+            if(root.right is None):
+                print(root.right)
+        left=self.printAllSingleChild(root.left)
+        right= self.printAllSingleChild(root.right)
+    def findCorresPondingNodeThatNode(self,root,cloned,target):
+        if(root is None or cloned is None):
+            return 
+        c1= root
+        c2= cloned
+        s1= []
+        s2= []
+        while c1 is not None or len(s1) !=0:
+            while c1 is not None:
+                s1.append(c1)
+                s2.append(c2)
+                c1 = c1.left
+                c2= c2.left
+        c1= s1.pop()
+        c2= s2.pop()
+        if(c1.val==target.val):
+            return True
+        c1= c1.right
+        c2= c2.right
+        return
+
+    def BSTfromInorderAndPreOrder(self,inorder,preOrder):
+        def dfs(inorder,preOrder,pre_start,pre_end,in_start,in_end):
+            if(in_start>in_end):
+                return
+            index=in_start
+            while inorder[index] !=preOrder[pre_start]:
+                index+=1
+            lrange=index-in_start
+
+            newNode= Node(preOrder[pre_start])
+            newNode.left=dfs(inorder,preOrder,pre_start+1,pre_start+lrange,in_start,index-1)
+            newNode.right=dfs(inorder,preOrder,pre_start+lrange+1,pre_end,index+1,in_end)
+            return newNode
+        return dfs(inorder,preOrder,0,len(preOrder)-1,0,len(inorder)-1)
+
+
+
+
 
 
 
@@ -550,13 +616,18 @@ n3.left=n7
 n3.right=n8
 n4.left=n9
 n4.right=n10
-n5.left=n12
+# n5.left=n12
 n5.right=n13
 
 a= [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26]
 
 
+
 count =1
+b.printAllSingleChild(tree)
+preorder = [3,9,20,15,7]
+inorder = [9,3,15,20,7]
+print(b.BSTfromInorderAndPreOrder(inorder,preorder))
 # print(b.levelOrderTraversal(b.mergeTwoBinary(tree, b.SortedArrayToBinaryTree(a,0,len(a)))))
 # print(b.levelOrderTraversal(b.SortedArrayToBinaryTree(a,0,len(a))))
 # print(b.levelOfNode(tree,5,count))
